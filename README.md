@@ -1,1 +1,2 @@
-# Sistema-de-Gest-o-Financeira
+# Sistema de Gestão Financeira
+O Sistema de Gestão Financeira é um projeto desenvolvido por alunos dos cursos de Ciência da Computação e Engenharia de Software da Universidade Federal do Cariri (UFCA), no âmbito da disciplina de Programação Orientada a Objetos (POO). Trata-se de um sistema backend desenvolvido em Java, voltado para o acompanhamento e controle de despesas pessoais ou organizacionais. O projeto tem como foco a aplicação prática dos principais conceitos da Programação Orientada a Objetos, atendendo aos requisitos estabelecidos pela disciplina.
