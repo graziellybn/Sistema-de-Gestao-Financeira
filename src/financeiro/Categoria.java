@@ -4,6 +4,13 @@ public class Categoria {
 	private String nome;
 	private boolean essencial;
 	private double limiteOrcamento;
+
+	public Categoria(String nome, boolean essencial, double limiteOrcamento){
+
+		this.nome = nome;
+		this.essencial = essencial;
+		this.limiteOrcamento = limiteOrcamentgo;
+	}
 	
 	public String getNome() {
 		return this.nome;
