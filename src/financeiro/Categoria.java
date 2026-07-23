@@ -9,7 +9,7 @@ public class Categoria {
 
 		this.nome = nome;
 		this.essencial = essencial;
-		this.limiteOrcamento = limiteOrcamentgo;
+		this.limiteOrcamento = limiteOrcamento;
 	}
 	
 	public String getNome() {
