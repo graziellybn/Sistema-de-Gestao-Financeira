@@ -38,6 +38,6 @@ public class Transacao {
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
-	
-	public abstract double getAfetaSaldo();
+
+
 }
