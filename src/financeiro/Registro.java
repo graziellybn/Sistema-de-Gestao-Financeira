@@ -11,7 +11,7 @@ public class Registro {
 	}
 	
 	public void adicionarTransacao(String cpf, Transacao novaTransacao) {
-		if(this.transacaoPorFamiliar.containsKey(cpf) == false) {
+		if(!this.transacaoPorFamiliar.containsKey(cpf)) {
 			List<Transacao> novaLista = new ArrayList<>();
 			this.transacaoPorFamiliar.put(cpf, novaLista);
 		}
