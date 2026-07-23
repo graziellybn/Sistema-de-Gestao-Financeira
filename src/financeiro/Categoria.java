@@ -11,6 +11,10 @@ public class Categoria {
 		this.essencial = essencial;
 		this.limiteOrcamento = limiteOrcamento;
 	}
+
+	public Categoria(){
+
+	}
 	
 	public String getNome() {
 		return this.nome;

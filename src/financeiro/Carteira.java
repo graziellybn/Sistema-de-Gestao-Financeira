@@ -30,7 +30,7 @@ public class Carteira {
 
     public void addTransação(String cpf){
 
-        System.out.println("Despesa -> aperte 0 \nReceita -> aperte 1");
+        System.out.println("Qual o tipo de Transação deseja adicionar?\nDespesa -> aperte 0 \nReceita -> aperte 1");
 
         int tipo = sc.nextInt();
 
@@ -70,6 +70,20 @@ public class Carteira {
             }
             if (resposta == 1){
                 System.out.println("Tal categoria é essencial?\nNão -> aperte 0 \nSim -> aperte 1");
+                while (resposta != 0 && resposta != 1){
+                    System.out.println("Reposta inválida! A categoria é essencial??\nNão -> aperte 0 \nSim -> aperte 1");
+                    resposta = sc.nextInt();
+                }
+                System.out.println("Qual o limite de orçamento da categoria?");
+                double lim = sc.nextDouble();
+                if (resposta == 1) {
+                    Categoria novacategoria = new Categoria(cat, true, lim);
+                }
+                if (resposta == 0){
+                    Categoria novacategoria = new Categoria(cat, false, lim);
+                }
+
+                categoriasP.add(novacategoria);
             }
         }
 
