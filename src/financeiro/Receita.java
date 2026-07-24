@@ -9,4 +9,9 @@ public class Receita extends Transacao{
     }
 
 
+    @Override
+    public void setValor(double valor) {
+        super.setValor(Math.abs(valor));
+    }
+
 }

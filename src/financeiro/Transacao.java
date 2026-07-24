@@ -9,10 +9,10 @@ public abstract class Transacao {
 	
 	public Transacao(String titulo, double valor, Categoria categoria, String data, String descricao) {
 		this.titulo = titulo;
-		this.valor = valor;
 		this.categoria = categoria;
         this.data = data;
         this.descricao = descricao;
+		setValor(valor);
 	}
 
 
@@ -26,6 +26,18 @@ public abstract class Transacao {
 
 	public double getValor() {
 		return valor;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public String getData() {
+		return data;
+	}
+
+	public void setData(String data) {
+		this.data = data;
 	}
 
 	public void setValor(double valor) {
