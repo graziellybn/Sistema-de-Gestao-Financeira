@@ -18,12 +18,10 @@ public class Conta implements Relatorio {
 
 
 
-
-
     public Conta(Usuario usuario, Categoria categoria) {
         this.usuario = usuario;
 
-        this.categoriasP = new HashSet<>(); //acho justo que o usuário tenha ao menos uma categoria antes de criar a conta!
+        this.categoriasP = new HashSet<>(); //acho justo que o usuário tenha ao menos uma categoria antes de criar a conta! (CONCORDO)
         categoriasP.add(categoria);
 
         this.listaReceitas = new ArrayList<>();
@@ -32,10 +30,18 @@ public class Conta implements Relatorio {
     }
 
     public double getSaldo() {
+
+        double saldoAtual = 0;
+
+        for(Receita receita : this.listaReceitas) {
+            saldoAtual += receita.getValor();
+        }
+        for(Despesa despesa : this.listaDespesas) {
+            saldoAtual += despesa.getValor();
+        }
+
+        this.saldo = saldoAtual;
         return saldo;
-    }
-    public void setSaldo(double saldo) {
-        this.saldo = saldo;
     }
 
 
@@ -59,8 +65,41 @@ public class Conta implements Relatorio {
     }
 
 
+    private void atualizaSaldo() {
+        double saldoAtual = 0;
+
+        for(Receita receita : this.listaReceitas) {
+            saldoAtual += receita.getValor();
+        }
+        for(Despesa despesa : this.listaDespesas) {
+            saldoAtual += despesa.getValor();
+        }
+
+        this.saldo = saldoAtual;
+    }
 
 
+
+    public boolean addReceita(Receita receita) {
+        if(receita.getValor() <= 0) {
+            return false;
+        }
+        else getListaReceitas().add(receita);
+        return true;
+    }
+
+    public boolean removeReceita(String nome) {
+        if(nome == null) return false;
+        else {
+            for(Despesa d : listaDespesas) {
+                if(d.getTitulo().equals(nome)) {
+                    listaDespesas.remove(d);
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 
 
 

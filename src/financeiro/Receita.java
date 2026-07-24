@@ -3,9 +3,9 @@ package financeiro;
 public class Receita extends Transacao{
 
 
-    public Receita(String titulo, double valor, Categoria categoria){
+    public Receita(String titulo, double valor, Categoria categoria, String data, String descricao){
 
-        super(titulo, valor, categoria);
+        super(titulo, valor, categoria, data,  descricao);
     }
 
 

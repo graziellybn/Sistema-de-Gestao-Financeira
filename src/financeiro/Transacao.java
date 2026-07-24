@@ -3,12 +3,16 @@ package financeiro;
 public abstract class Transacao {
 	private String titulo;
 	private double valor;
-	private Categoria categoria;
+    private String descricao;
+    private String data;
+    private Categoria categoria;
 	
-	public Transacao(String titulo, double valor, Categoria categoria) {
+	public Transacao(String titulo, double valor, Categoria categoria, String data, String descricao) {
 		this.titulo = titulo;
 		this.valor = valor;
 		this.categoria = categoria;
+        this.data = data;
+        this.descricao = descricao;
 	}
 
 
