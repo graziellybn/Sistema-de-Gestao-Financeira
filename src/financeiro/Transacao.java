@@ -15,6 +15,10 @@ public abstract class Transacao {
 		setValor(valor);
 	}
 
+	public Transacao(){
+
+	}
+
 
 	public String getTitulo() {
 		return titulo;
