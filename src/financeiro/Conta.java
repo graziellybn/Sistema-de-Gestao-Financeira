@@ -70,6 +70,9 @@ public class Conta implements Relatorio {
     }
 
 
+
+
+
     private void atualizaSaldo() {
         double saldoAtual = 0;
 
@@ -81,6 +84,59 @@ public class Conta implements Relatorio {
         }
 
         this.saldo = saldoAtual;
+    }
+
+
+
+    public Receita criarReceita(){
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Nome da nova Receita: ");
+        String titulo = sc.nextLine();
+
+        System.out.println("Valor da nova receita: ");
+        double valor = sc.nextDouble();
+        while (valor <= 0){
+            System.out.println("Valores nulos ou negativos são inválidos, digite o valor correto: ");
+            valor = sc.nextDouble();
+        }
+        sc.nextLine();
+
+        System.out.println("Defina a categoria da receita:");
+        StringBuilder sb = new StringBuilder();
+        for (Categoria c : categoriasP) {                           //nem tente entender chefe
+            if (sb.length() > 0) sb.append(" , ");
+            sb.append(c.getNome());
+        }
+        System.out.println(sb.toString());
+
+        System.out.println("Escolha qual categoria da lista acima deseja colocar a nova receita: ");
+        String nomecategoria = sc.nextLine();
+
+        Categoria categoria = null;
+        for (Categoria c : categoriasP) {
+            if (c.getNome().equalsIgnoreCase(nomecategoria)) {
+                categoria = c;
+                break;
+            }
+        }
+
+        if (categoria == null){
+            System.out.println("Categoria não encontrada! Operação cancelada");
+            return null;
+        }
+
+        System.out.println("Qual a data que a receita entrará em sua carteira? ");
+        String data = sc.nextLine();
+
+        System.out.println("Dê uma breve descrição da receita: ");
+        String descricao = sc.nextLine();
+
+        Receita novareceita = new Receita(titulo, valor, categoria, data, descricao);
+
+        return novareceita;
+
     }
 
 
@@ -104,6 +160,78 @@ public class Conta implements Relatorio {
             }
             return false;
         }
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public Despesa criarDespesa() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Nome da nova Despesa: ");
+        String titulo = sc.nextLine();
+
+        System.out.println("Valor da nova despesa: ");
+        double valor = sc.nextDouble();
+        while (valor <= 0){
+            System.out.println("Valores nulos ou negativos são inválidos, digite o valor correto: ");
+            valor = sc.nextDouble();
+        }
+        sc.nextLine();
+
+        System.out.println("Defina a categoria da despesa:");
+        StringBuilder sb = new StringBuilder();
+        for (Categoria c : categoriasP) {
+            if (sb.length() > 0) sb.append(" , ");           //genuinamente maluquice, é só algo pra imprimir os nomes das categorias em uma linha
+            sb.append(c.getNome());
+        }
+        System.out.println(sb.toString());
+
+        System.out.println("Escolha qual categoria da lista acima deseja colocar a nova despesa: ");
+        String nomeCategoria = sc.nextLine();
+
+        Categoria categoria = null;
+        for (Categoria c : categoriasP) {
+            if (c.getNome().equalsIgnoreCase(nomeCategoria)) {
+                categoria = c;
+                break;
+            }
+        }
+        if (categoria == null) {
+            System.out.println("Categoria não encontrada! Operação cancelada.");
+            return null;
+        }
+
+        System.out.println("Essa despesa é essencial? \nNão --> Aperte 0\nSim --> Aperte 1");
+        int essencialInt = sc.nextInt();
+        sc.nextLine();
+
+        while (essencialInt != 0 && essencialInt != 1) {
+            System.out.println("!Operação inválida! Essa despesa é essencial? \nNão --> Aperte 0\nSim --> Aperte 1");
+            essencialInt = sc.nextInt();
+            sc.nextLine();
+        }
+
+        boolean essencial = false;
+
+        if (essencialInt == 1){
+            essencial = true;
+        }
+
+        System.out.println("Qual a data que será necessário pagar essa nova despesa? ");
+        String data = sc.nextLine();
+
+        System.out.println("Dê uma breve descrição da despesa: ");
+        String descricao = sc.nextLine();
+
+        return new Despesa(titulo, valor, categoria, essencial, data, descricao);
     }
 
 
