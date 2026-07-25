@@ -36,37 +36,28 @@ public class Conta implements Relatorio {
 
     public double getSaldo() {
 
-        double saldoAtual = 0;
-
-        for(Receita receita : this.listaReceitas) {
-            saldoAtual += receita.getValor();
-        }
-        for(Despesa despesa : this.listaDespesas) {
-            saldoAtual += despesa.getValor();
-        }
-
-        this.saldo = saldoAtual;
-        return saldo;
+        atualizaSaldo();
+        return this.saldo;
     }
 
 
     public Usuario getUsuario() {
-        return usuario;
+        return this.usuario;
     }
 
 
     public ArrayList<Receita> getListaReceitas() {
-        return listaReceitas;
+        return this.listaReceitas;
     }
 
 
     public ArrayList<Despesa> getListaDespesas() {
-        return listaDespesas;
+        return this.listaDespesas;
     }
 
 
     public HashSet<Categoria> getCategoriasP() {
-        return categoriasP;
+        return this.categoriasP;
     }
 
 
@@ -88,7 +79,7 @@ public class Conta implements Relatorio {
 
 
 
-    public Receita criarReceita(){
+    public boolean criarReceita(){
 
         Scanner sc = new Scanner(System.in);
 
@@ -124,7 +115,7 @@ public class Conta implements Relatorio {
 
         if (categoria == null){
             System.out.println("Categoria não encontrada! Operação cancelada");
-            return null;
+            return false;
         }
 
         System.out.println("Qual a data que a receita entrará em sua carteira? ");
@@ -135,13 +126,13 @@ public class Conta implements Relatorio {
 
         Receita novareceita = new Receita(titulo, valor, categoria, data, descricao);
 
-        return novareceita;
+        return addReceita(novareceita);
 
     }
 
 
 
-    public boolean addReceita(Receita receita) {
+    private boolean addReceita(Receita receita) {
         if(receita.getValor() <= 0) {
             return false;
         }

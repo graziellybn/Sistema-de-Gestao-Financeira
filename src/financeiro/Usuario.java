@@ -1,5 +1,6 @@
 package financeiro;
 
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Usuario {
@@ -65,6 +66,21 @@ public class Usuario {
     }
 
 
+    public Usuario criarUsuario() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Digite o nome do usuario: ");
+        String usuario = sc.nextLine();
+        System.out.println("Digite o email do usuario: ");
+        String email = sc.nextLine();
+        System.out.println("Digite o CPF do usuario: ");
+        String cpf = sc.nextLine();
+        System.out.println("Digite o senha do usuario: ");
+        int senha = sc.nextInt();
+        Usuario novoUsuario = new Usuario(usuario, email, senha, cpf);
+        sc.close();
+
+        return novoUsuario;
+    }
 
 
 

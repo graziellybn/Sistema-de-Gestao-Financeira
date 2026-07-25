@@ -52,5 +52,7 @@ public abstract class Transacao {
 		this.categoria = categoria;
 	}
 
+    public void setDescricao(String descricao) {this.descricao = descricao;}
+
 
 }
