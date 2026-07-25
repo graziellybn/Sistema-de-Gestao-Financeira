@@ -80,7 +80,7 @@ public class Usuario {
         sc.close();
 
         return novoUsuario;
-    }
+    } //FUNÇÃO PARA USAR EM CONTA FAMILIA
 
 
 

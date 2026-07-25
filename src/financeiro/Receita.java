@@ -1,11 +1,14 @@
 package financeiro;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class Receita extends Transacao{
 
 
-    public Receita(String titulo, double valor, Categoria categoria, String data, String descricao){
+    public Receita(String titulo, double valor, Categoria categoria, LocalDate data, String descricao){
 
         super(titulo, valor, categoria, data,  descricao);
     }
@@ -94,7 +97,22 @@ public class Receita extends Transacao{
                 // editar categoria
                 break;
             case 3:
-                // editar data
+                boolean valido = false;
+                LocalDate novaData = null;
+                DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                while (!valido) {
+                    System.out.println("Digite a nova data (dd/MM/yyyy): ");
+                    String texto = sc.next();
+
+                    try {
+                        novaData = LocalDate.parse(texto, formato);
+                        valido = true;
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Data inválida! Use o formato dd/MM/yyyy.");
+                    }
+                }
+
                 break;
             case 4:
                 System.out.println("Descrição atual: " +  getDescricao());

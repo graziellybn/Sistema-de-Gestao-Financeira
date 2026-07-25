@@ -41,11 +41,16 @@ public class Categoria {
 	}
 	
 	public String printa() {
-		if(this.essencial == true) {
+		if(this.essencial) {
 			return "[Essencial] " + this.nome;
 		}
 		else {
 			return "[Normal] " + this.nome;
 		}
 	}
+
+
+    public boolean editCategoria(Categoria categoria) {
+
+    }
 }

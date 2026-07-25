@@ -1,5 +1,8 @@
 package financeiro;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -119,7 +122,20 @@ public class Conta implements Relatorio {
         }
 
         System.out.println("Qual a data que a receita entrará em sua carteira? ");
-        String data = sc.nextLine();
+        boolean valido = false;
+        LocalDate data = null;
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        while (!valido) {
+            String texto = sc.next();
+
+            try {
+                data = LocalDate.parse(texto, formato);
+                valido = true;
+            } catch (DateTimeParseException e) {
+                System.out.println("Data inválida! Use o formato dd/MM/yyyy.");
+            }
+        }
 
         System.out.println("Dê uma breve descrição da receita: ");
         String descricao = sc.nextLine();
@@ -216,8 +232,20 @@ public class Conta implements Relatorio {
             essencial = true;
         }
 
-        System.out.println("Qual a data que será necessário pagar essa nova despesa? ");
-        String data = sc.nextLine();
+        boolean valido = false;
+        LocalDate data = null;
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        while (!valido) {
+            String texto = sc.next();
+
+            try {
+                data = LocalDate.parse(texto, formato);
+                valido = true;
+            } catch (DateTimeParseException e) {
+                System.out.println("Data inválida! Use o formato dd/MM/yyyy.");
+            }
+        }
 
         System.out.println("Dê uma breve descrição da despesa: ");
         String descricao = sc.nextLine();

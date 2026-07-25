@@ -1,10 +1,12 @@
 package financeiro;
 
+import java.time.LocalDate;
+
 public class Despesa extends Transacao{
 
     private boolean essencial;
 
-    public Despesa(String titulo, double valor, Categoria categoria, boolean essencial, String data, String descricao){
+    public Despesa(String titulo, double valor, Categoria categoria, boolean essencial, LocalDate data, String descricao){
 
         super(titulo, valor, categoria, data,  descricao);
         this.essencial = essencial;

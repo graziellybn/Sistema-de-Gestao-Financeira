@@ -1,13 +1,15 @@
 package financeiro;
 
+import java.time.LocalDate;
+
 public abstract class Transacao {
 	private String titulo;
 	private double valor;
     private String descricao;
-    private String data;
+    private LocalDate data;
     private Categoria categoria;
 	
-	public Transacao(String titulo, double valor, Categoria categoria, String data, String descricao) {
+	public Transacao(String titulo, double valor, Categoria categoria, LocalDate data, String descricao) {
 		this.titulo = titulo;
 		this.categoria = categoria;
         this.data = data;
@@ -32,15 +34,15 @@ public abstract class Transacao {
 		return descricao;
 	}
 
-	public String getData() {
-		return data;
+	public LocalDate getData() {
+		return this.data;
 	}
 
-	public void setData(String data) {
+	public void setData(LocalDate data) {
 		this.data = data;
 	}
 
-	public void setValor(double valor) {
+	protected void setValor(double valor) {
 		this.valor = valor;
 	}
 
