@@ -2,55 +2,51 @@ package financeiro;
 
 public class Categoria {
 	private String nome;
-	private boolean essencial;
 	private double limiteOrcamento;
+	private double orçamentoAtual;
 
-	public Categoria(String nome, boolean essencial, double limiteOrcamento){
+	public Categoria(String nome, double limiteOrcamento){
 
 		this.nome = nome;
-		this.essencial = essencial;
 		this.limiteOrcamento = limiteOrcamento;
+		this.orçamentoAtual = 0;
 	}
 
-	public Categoria(){
-
+	public Categoria(String nome){
+        this.nome = nome;
 	}
+
+    public Categoria(){};
 	
 	public String getNome() {
 		return this.nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public boolean isEssencial() {
-		return this.essencial;
+
+	public double getOrçamentoAtual() {
+		return orçamentoAtual;
 	}
-	public void setEssencial(boolean essencial) {
-		this.essencial = essencial;
+
+	public void setOrçamentoAtual(double orçamentoAtual) {
+		this.orçamentoAtual = orçamentoAtual;
 	}
+
 	public double getLimiteOrcamento() {
 		return limiteOrcamento;
 	}
-	public void setLimiteOrcamento(double limiteOrcamento) {
-		this.limiteOrcamento = limiteOrcamento;
-	}
+
 	
 	public boolean ehIgual(Categoria outraCategoria) {
 		if(this.nome.equals(outraCategoria.getNome())) return true;
 		else return false;
 	}
 	
-	public String printa() {
-		if(this.essencial) {
-			return "[Essencial] " + this.nome;
-		}
-		else {
-			return "[Normal] " + this.nome;
-		}
+	public void mostraInformaçoes() {
+		System.out.println("Categoria: " + this.getNome());
+		System.out.println("Valor atual de gastos: " + this.getOrçamentoAtual());
+		System.out.println("limite de orçamento:" + this.getLimiteOrcamento());
 	}
-
-
-    public boolean editCategoria(Categoria categoria) {
-
-    }
 }

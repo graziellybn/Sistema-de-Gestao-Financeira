@@ -77,7 +77,6 @@ public class Usuario {
         System.out.println("Digite o senha do usuario: ");
         int senha = sc.nextInt();
         Usuario novoUsuario = new Usuario(usuario, email, senha, cpf);
-        sc.close();
 
         return novoUsuario;
     } //FUNÇÃO PARA USAR EM CONTA FAMILIA
@@ -86,40 +85,50 @@ public class Usuario {
 
 
 
-	public void mostrarInformacoesUsuario(){
+    public void mostrarInformacoes(){
+        Scanner sc = new Scanner(System.in);
 
-		Scanner sc = new Scanner(System.in);
+        System.out.println("====================================");
+        System.out.println("--> Dados da sua Conta:");
+        System.out.println("[Nome do Usuário]: " + getNome());
+        System.out.println("[Email do Usuário]" + getEmail());
 
-		System.out.println("--> Dados da sua Conta:");
-		System.out.println("[Nome do Usuário]: " + getNome());
-		System.out.println("[Email do Usuário]" + getEmail());
-		System.out.println("Deseja ver o cpf? \nNão --> Aperte 0\nSim -- Aperte 1");
+        int conf = -1;
+        boolean valido = false;
 
-		int conf = sc.nextInt();
+        while (!valido) {
+            System.out.println("Deseja ver o cpf? \nNão --> Aperte 0\nSim -- Aperte 1");
 
-		while (conf != 1 && conf != 0){
-			System.out.println("!Operação inválida! Deseja ver o cpf? \nNão --> Aperte 0\nSim -- Aperte 1");
-			conf = sc.nextInt();
-		}
+            if (sc.hasNextInt()) {
+                conf = sc.nextInt();
+                if (conf == 0 || conf == 1) {
+                    valido = true;
+                } else {
+                    System.out.println("!Operação inválida!");
+                }
+            } else {
+                System.out.println("!Entrada inválida, digite 0 ou 1!");
+                sc.next(); // aqui SIM faz sentido: descarta o token não-numérico inválido
+            }
+        }
 
-		if (conf == 1){
-			int senhaValidação;
-			System.out.println("Digite sua Senha para ter acesso ao cpf:");
-			senhaValidação = sc.nextInt();
+        if (conf == 1){
+            System.out.println("Digite sua Senha para ter acesso ao cpf:");
+            int senhaValidacao;
 
-			if(getSenha() == senhaValidação) {
-				System.out.println("[CPF do Usuário]: " + getCpf());
-			}
-			else {
-				System.out.println("Senha incorreta, processo finalizado!");
-			}
-		}
-
-
-
-
-	}
-
+            if (sc.hasNextInt()) {
+                senhaValidacao = sc.nextInt();
+                if (getSenha() == senhaValidacao) {
+                    System.out.println("[CPF do Usuário]: " + getCpf());
+                } else {
+                    System.out.println("Senha incorreta, processo finalizado!");
+                }
+            } else {
+                System.out.println("Senha inválida, processo finalizado!");
+            }
+        }
+        System.out.println("====================================");
+    }
 
 
 
