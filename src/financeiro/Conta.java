@@ -64,6 +64,104 @@ public class Conta implements Relatorio {
 
 
 
+    public void mostrarReceitas(){
+
+        for(Receita r : listaReceitas){
+
+            System.out.println("-----------------------\n");
+            System.out.println("[Nome da Receita]: " + r.getTitulo());
+            System.out.println("[Categoria da Receita]: " + r.getCategoria().getNome());
+            System.out.println("[Valor da Receita]: " + r.getValor());
+            System.out.println("[Descrição da Receita]: " + r.getDescricao());
+
+        }
+
+    }
+
+
+    public void mostrarReceitasPorCategoria(String nome){
+
+        boolean tem = false;
+        Categoria ctg = new Categoria();
+
+        for (Categoria c : categoriasP){
+            if (c.getNome().equals(nome)){
+                tem = true;
+                ctg = c;
+            }
+        }
+
+        if (tem){
+
+            for (Receita r : listaReceitas){
+
+                if (r.getCategoria().getNome().equals(nome)){
+                    System.out.println("-----------------------\n");
+                    System.out.println("[Nome da Receita]: " + r.getTitulo());
+                    System.out.println("[Categoria da Receita]: " + r.getCategoria().getNome());
+                    System.out.println("[Valor da Receita]: " + r.getValor());
+                    System.out.println("[Descrição da Receita]: " + r.getDescricao());
+
+                }
+
+            }
+
+        }
+
+    }
+
+
+
+
+
+    public void mostrarDespesas(){
+
+        for(Despesa d : listaDespesas){
+
+            System.out.println("-----------------------\n");
+            System.out.println("[Nome da Despesa]: " + d.getTitulo());
+            System.out.println("[Categoria da Despesa]: " + d.getCategoria().getNome());
+            System.out.println("[Valor da Despesa]: " + d.getValor());
+            System.out.println("[Descrição da Despesa]: " + d.getDescricao());
+
+        }
+
+    }
+
+
+
+    public void mostrarDespesasPorCategoria(String nome){
+
+        boolean tem = false;
+        Categoria ctg = new Categoria();
+
+        for (Categoria c : categoriasP){
+            if (c.getNome().equals(nome)){
+                tem = true;
+                ctg = c;
+            }
+        }
+
+        if (tem){
+
+            for(Despesa d : listaDespesas){
+
+                System.out.println("-----------------------\n");
+                System.out.println("[Nome da Despesa]: " + d.getTitulo());
+                System.out.println("[Categoria da Despesa]: " + d.getCategoria().getNome());
+                System.out.println("[Valor da Despesa]: " + d.getValor());
+                System.out.println("[Descrição da Despesa]: " + d.getDescricao());
+
+            }
+
+        }
+
+    }
+
+
+
+
+
     private void atualizaSaldo() {
         double saldoAtual = 0;
 
@@ -118,11 +216,6 @@ public class Conta implements Relatorio {
             return false;
         }
 
-        if (valor + categoria.getOrçamentoAtual() > categoria.getLimiteOrcamento()){
-            System.out.println("O valor irá ultrapassar o limite financeiro estabelecido na categoria\nMude o valor limite ou crie uma nova categoria");
-            return false;
-        }
-
         System.out.println("Qual a data que a receita entrará em sua carteira? ");
         String data = sc.nextLine();
 
@@ -144,6 +237,10 @@ public class Conta implements Relatorio {
         else getListaReceitas().add(receita);
         return true;
     }
+
+
+
+
 
     public boolean removeReceita(String nome) {
         if(nome == null) return false;
@@ -206,7 +303,7 @@ public class Conta implements Relatorio {
         }
 
         if (valor + categoria.getOrçamentoAtual() > categoria.getLimiteOrcamento()){
-            System.out.println("O valor irá ultrapassar o limite financeiro estabelecido na categoria\nMude o valor limite ou crie uma nova categoria");
+            System.out.println("O valor irá ultrapassar o limite financeiro estabelecido na categoria\nMude o valor limite da categoria " + categoria.getNome() + " ou crie uma nova categoria");
             return false;
         }
 
@@ -392,14 +489,39 @@ public class Conta implements Relatorio {
         if (conf == 1){
 
             System.out.println("toda receita ou despesa que você lança precisa estar ligada a uma categoria — " +
-                    "é assim que o sistema organiza seus lançamentos em grupos como \"Alimentação\", \"Moradia\", \"Lazer\", \"Transporte\", " +
-                    "e assim por diante.");
+                    "\né assim que o sistema organiza seus lançamentos em grupos como \"Alimentação\", \"Moradia\", \"Lazer\", \"Transporte\", " +
+                    "e assim por diante.\n Coloque suas despesas e receitas nas categorias de acordo. Além disso, toda categoria tem um limite de orçamento, " +
+                    "esse limite vale para toda despesa que for adicionada,\n ou seja, toda categoria terá um limite de despesas");
 
-            System.out.println("Toda vez que você for registrar uma nova receita ou despesa, o sistema mostrará a" +
+            System.out.println("Toda vez que você for registrar uma nova receita ou despesa,\n o sistema mostrará a" +
                     " lista de categorias que você já tem disponíveis e pedirá pra você escolher uma delas pelo nome.");
 
         }
 
+
+        System.out.println("Qual o nome da categoria nova?");
+        String nome = sc.nextLine();
+
+        for (Categoria c : categoriasP){
+            if (c.getNome() == nome){
+                System.out.println("Essa categoria já existe!");
+                return false;
+            }
+        }
+
+        System.out.println("Defina um limite de orçamento para essa categoria");
+        double limiteOrçamento = sc.nextDouble();
+
+        while (limiteOrçamento <= 0){
+            System.out.println("Valores nulos ou negativos são inválidos, defina um limite de orçamento para essa categoria: ");
+            limiteOrçamento = sc.nextDouble();
+        }
+
+        Categoria novacategoria = new Categoria(nome, limiteOrçamento);
+
+        categoriasP.add(novacategoria);
+
+        return true;
 
 
     }

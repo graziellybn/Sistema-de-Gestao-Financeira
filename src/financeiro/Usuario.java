@@ -1,6 +1,5 @@
 package financeiro;
 
-import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class Usuario {
@@ -115,8 +114,7 @@ public class Usuario {
 			}
 		}
 
-
-
+		return;
 
 	}
 
