@@ -68,7 +68,6 @@ public class Receita extends Transacao{
                 return false;
             }
 
-            // Confirma
             System.out.println("Você escolheu a opção " + opcao + ". Confirma? (s/n)");
             String resposta = sc.next().trim().toLowerCase();
 

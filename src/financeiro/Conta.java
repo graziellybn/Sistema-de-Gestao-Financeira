@@ -230,6 +230,7 @@ public class Conta implements Relatorio {
 
 
     public boolean criarDespesa() {
+
         Scanner sc = new Scanner(System.in);
 
         System.out.println("Nome da nova Despesa: ");
@@ -682,9 +683,10 @@ public class Conta implements Relatorio {
 
         System.out.println("- Lista de despesas por categoria: ");
 
+        int cont = 1;
         for (Categoria c : categoriasP){
 
-            System.out.println("Categoria 1: " + c.getNome());
+            System.out.println("Categoria " + cont + ": " + c.getNome());
             System.out.println("Valor gasto nessa categoria: " + c.getOrçamentoAtual());
             System.out.println("\n");
         }
@@ -720,8 +722,11 @@ public class Conta implements Relatorio {
         }
 
         Despesa maiorDespesa = null;
+        double totalDespesas = 0;
 
         for (Despesa d : listaDespesas){
+            totalDespesas = totalDespesas + d.getValor();
+
             if (maiorDespesa == null || Math.abs(d.getValor()) > Math.abs(maiorDespesa.getValor())){
                 maiorDespesa = d;
             }
@@ -731,6 +736,8 @@ public class Conta implements Relatorio {
         System.out.println("- Sua maior despesa é: " + maiorDespesa.getTitulo() + ", com um gasto de: " + maiorDespesa.getValor() + " R$");
         System.out.println("Ela está na categoria: " + "[" + maiorDespesa.getCategoria().getNome() + "]");
 
+        double mediaDespesa = totalDespesas / listaDespesas.size();
+        System.out.println("- Valor médio por despesa: " + mediaDespesa + " R$");
 
         System.out.println("- Sua maior receita é: " + maiorReceita.getTitulo() + ", com um ganho de: " + maiorReceita.getValor() + " R$");
 
@@ -745,7 +752,7 @@ public class Conta implements Relatorio {
             }
         }
 
-        System.out.println("- Categoria com maior volume de gastos: [" + categoriaMaior.getNome() + "], totalizando " + categoriaMaiorValor + " R$\n");
+        System.out.println("- A sua categoria com maior volume de gastos é: [" + categoriaMaior.getNome() + "], totalizando " + categoriaMaiorValor + " R$\n");
 
         System.out.println("Gostaria de saber quais despesas seria interessante cortar para minimizar seus gastos?\nSim --> Aperte 1\nNão --> Aperte 0");
         int conf = sc.nextInt();
