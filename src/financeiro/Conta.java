@@ -70,43 +70,10 @@ public class Conta implements Relatorio {
 
         for(Receita r : listaReceitas){
 
-            System.out.println("-----------------------\n");
+            System.out.println("\n==============================\n");
             System.out.println("[Nome da Receita]: " + r.getTitulo());
-            System.out.println("[Categoria da Receita]: " + r.getCategoria().getNome());
             System.out.println("[Valor da Receita]: " + r.getValor());
             System.out.println("[Descrição da Receita]: " + r.getDescricao());
-
-        }
-
-    }
-
-
-    public void mostrarReceitasPorCategoria(String nome){
-
-        boolean tem = false;
-        Categoria ctg = new Categoria();
-
-        for (Categoria c : categoriasP){
-            if (c.getNome().equals(nome)){
-                tem = true;
-                ctg = c;
-            }
-        }
-
-        if (tem){
-
-            for (Receita r : listaReceitas){
-
-                if (r.getCategoria().getNome().equals(nome)){
-                    System.out.println("-----------------------\n");
-                    System.out.println("[Nome da Receita]: " + r.getTitulo());
-                    System.out.println("[Categoria da Receita]: " + r.getCategoria().getNome());
-                    System.out.println("[Valor da Receita]: " + r.getValor());
-                    System.out.println("[Descrição da Receita]: " + r.getDescricao());
-
-                }
-
-            }
 
         }
 
@@ -120,7 +87,7 @@ public class Conta implements Relatorio {
 
         for(Despesa d : listaDespesas){
 
-            System.out.println("-----------------------\n");
+            System.out.println("\n==============================\n");
             System.out.println("[Nome da Despesa]: " + d.getTitulo());
             System.out.println("[Categoria da Despesa]: " + d.getCategoria().getNome());
             System.out.println("[Valor da Despesa]: " + d.getValor());
@@ -148,12 +115,14 @@ public class Conta implements Relatorio {
 
             for(Despesa d : listaDespesas){
 
-                System.out.println("-----------------------\n");
-                System.out.println("[Nome da Despesa]: " + d.getTitulo());
-                System.out.println("[Categoria da Despesa]: " + d.getCategoria().getNome());
-                System.out.println("[Valor da Despesa]: " + d.getValor());
-                System.out.println("[Descrição da Despesa]: " + d.getDescricao());
+                if (d.getCategoria().equals(ctg)) {
 
+                    System.out.println("\n==============================\n");
+                    System.out.println("[Nome da Despesa]: " + d.getTitulo());
+                    System.out.println("[Categoria da Despesa]: " + d.getCategoria().getNome());
+                    System.out.println("[Valor da Despesa]: " + d.getValor());
+                    System.out.println("[Descrição da Despesa]: " + d.getDescricao());
+                }
             }
 
         }
@@ -183,16 +152,6 @@ public class Conta implements Relatorio {
 
         Scanner sc = new Scanner(System.in);
 
-        if(categoriasP.isEmpty()){
-            System.out.println("====================================");
-            System.out.println("Não há nenhuma categoria cadastrada, por favor, crie uma: ");
-            System.out.println("Digite um nome para a categoria (palavra única): ");
-            String nome = sc.nextLine();
-            Categoria cat =  new Categoria(nome);
-            categoriasP.add(cat);
-
-        }
-
         System.out.println("====================================");
         System.out.println("Nome da nova Receita: ");
         String titulo = sc.nextLine();
@@ -204,30 +163,6 @@ public class Conta implements Relatorio {
             valor = sc.nextDouble();
         }
         sc.nextLine();
-
-        System.out.println("Defina a categoria da receita:");
-        StringBuilder sb = new StringBuilder();
-        for (Categoria c : categoriasP) {                           //nem tente entender chefe
-            if (sb.length() > 0) sb.append(" , ");
-            sb.append(c.getNome());
-        }
-        System.out.println(sb.toString());
-
-        System.out.println("Escolha qual categoria da lista acima deseja colocar a nova receita: ");
-        String nomecategoria = sc.nextLine();
-
-        Categoria categoria = null;
-        for (Categoria c : categoriasP) {
-            if (c.getNome().equalsIgnoreCase(nomecategoria)) {
-                categoria = c;
-                break;
-            }
-        }
-
-        if (categoria == null){
-            System.out.println("Categoria não encontrada! Operação cancelada");
-            return false;
-        }
 
 
         System.out.println("Qual a data que a receita entrará em sua carteira? (dd/mm/aaaa)");
@@ -250,7 +185,7 @@ public class Conta implements Relatorio {
         System.out.println("Dê uma breve descrição da receita: ");
         String descricao = sc.nextLine();
 
-        Receita novareceita = new Receita(titulo, valor, categoria, data, descricao);
+        Receita novareceita = new Receita(titulo, valor, data, descricao);
 
         return addReceita(novareceita);
 
@@ -263,6 +198,7 @@ public class Conta implements Relatorio {
             return false;
         }
         else getListaReceitas().add(receita);
+        this.atualizaSaldo();
         return true;
     }
 
@@ -326,7 +262,7 @@ public class Conta implements Relatorio {
             }
         }
         if (categoria == null) {
-            System.out.println("Categoria não encontrada! Operação cancelada.");
+            System.out.println("Categoria não encontrada! Crie uma nova categoria que se adeque a essa nova despesa ou coloque-a em uma categoria já existente! Operação cancelada.");
             return false;
         }
 
@@ -372,6 +308,7 @@ public class Conta implements Relatorio {
             try {
                 data = LocalDate.parse(texto, formato);
                 valido = true;
+                sc.nextLine();
             } catch (DateTimeParseException e) {
                 System.out.println("Data inválida! Use o formato dd/MM/yyyy.");
             }
@@ -413,14 +350,16 @@ public class Conta implements Relatorio {
                 }
                 else if (conf == 1){
                     System.out.println("Compreendido, adicionando despesa a sua lista de despesas!");
-                    despesa.getCategoria().setOrçamentoAtual( despesa.getCategoria().getOrçamentoAtual() + despesa.getValor() );
+                    despesa.getCategoria().setOrçamentoAtual(despesa.getCategoria().getOrçamentoAtual() + Math.abs(despesa.getValor()));
                     listaDespesas.add(despesa);
+                    this.atualizaSaldo();
                     return true;
                 }
             }
 
-            despesa.getCategoria().setOrçamentoAtual( despesa.getCategoria().getOrçamentoAtual() + despesa.getValor() );
+            despesa.getCategoria().setOrçamentoAtual(despesa.getCategoria().getOrçamentoAtual() + Math.abs(despesa.getValor()));
             listaDespesas.add(despesa);
+            this.atualizaSaldo();
             return true;
         }
     }
@@ -471,6 +410,7 @@ public class Conta implements Relatorio {
             }
 
             listaDespesas.remove(despesaAlvo);
+            despesaAlvo.getCategoria().setOrçamentoAtual(despesaAlvo.getCategoria().getOrçamentoAtual() - Math.abs(despesaAlvo.getValor()));
             atualizaSaldo();
             return true;
         }
@@ -494,6 +434,7 @@ public class Conta implements Relatorio {
         }
 
         listaDespesas.remove(despesaAlvo);
+        despesaAlvo.getCategoria().setOrçamentoAtual(despesaAlvo.getCategoria().getOrçamentoAtual() - Math.abs(despesaAlvo.getValor()));
         atualizaSaldo();
         return true;
     }
@@ -521,6 +462,7 @@ public class Conta implements Relatorio {
             System.out.println("!Reposta Inválida! Gostaria de saber como funciona antes de criar uma categoria nova?");
             conf = sc.nextInt();
         }
+        sc.nextLine();
 
         if (conf == 3){
             return false;
@@ -528,10 +470,10 @@ public class Conta implements Relatorio {
 
         if (conf == 1){
 
-            System.out.println("toda receita ou despesa que você lança precisa estar ligada a uma categoria — " +
-                    "\né assim que o sistema organiza seus lançamentos em grupos como \"Alimentação\", \"Moradia\", \"Lazer\", \"Transporte\", " +
-                    "e assim por diante.\n Coloque suas despesas e receitas nas categorias de acordo. Além disso, toda categoria tem um limite de orçamento, " +
-                    "esse limite vale para toda despesa que for adicionada,\n ou seja, toda categoria terá um limite de despesas");
+            System.out.println("toda despesa que você lança precisa estar ligada a uma categoria — " +
+                    "\né assim que o sistema organiza seus gastos em grupos como \"Alimentação\", \"Moradia\", \"Lazer\", \"Transporte\", " +
+                    "e assim por diante.\nColoque suas despesas nas categorias de acordo. Além disso, toda categoria tem um limite de orçamento, " +
+                    "esse limite vale para toda despesa que for adicionada,\nTenha sempre em mente seus gastos com cada categoria");
 
             System.out.println("Toda vez que você for registrar uma nova receita ou despesa,\n o sistema mostrará a" +
                     " lista de categorias que você já tem disponíveis e pedirá pra você escolher uma delas pelo nome.");
@@ -544,7 +486,7 @@ public class Conta implements Relatorio {
         String nome = sc.nextLine();
 
         for (Categoria c : categoriasP){
-            if (c.getNome() == nome){
+            if (c.getNome().equalsIgnoreCase(nome)){
                 System.out.println("Essa categoria já existe!");
                 return false;
             }
@@ -568,13 +510,295 @@ public class Conta implements Relatorio {
     }
 
 
+
+
+
+
+
+    public boolean removeCategoria(String nome) {
+        if (nome == null) return false;
+
+        Categoria categoriaAlvo = null;
+
+        for (Categoria c : categoriasP) {
+            if (c.getNome().equalsIgnoreCase(nome)) {
+                categoriaAlvo = c;
+                break;
+            }
+        }
+
+        if (categoriaAlvo == null) {
+            System.out.println("Categoria não encontrada! Cancelando Operaçap!");
+            return false;
+        }
+
+        ArrayList<Despesa> despesasVinculadas = new ArrayList<>();
+
+        for (Despesa d : listaDespesas) {
+            if (d.getCategoria().equals(categoriaAlvo)) {
+                despesasVinculadas.add(d);
+            }
+        }
+
+        if (!despesasVinculadas.isEmpty()) {
+
+            Scanner sc = new Scanner(System.in);
+
+            System.out.println("Existem " + despesasVinculadas.size() + " despesa(s) na categoria \"" + categoriaAlvo.getNome() + "\".");
+            System.out.println("O que deseja fazer?");
+            System.out.println("0 --> Cancelar remoção");
+            System.out.println("1 --> Mover essas despesas para outra categoria existente");
+            System.out.println("2 --> Remover a categoria e todas as despesas vinculadas a ela");
+
+            int conf = sc.nextInt();
+            sc.nextLine();
+
+            while (conf != 0 && conf != 1 && conf != 2) {
+                System.out.println("!Opção inválida! Escolha uma das três opções: ");
+                conf = sc.nextInt();
+                sc.nextLine();
+            }
+
+            if (conf == 0) {
+                System.out.println("Operação cancelada.");
+                return false;
+            }
+
+            if (conf == 1) {
+                if (categoriasP.size() <= 1) {
+                    System.out.println("Não há outra categoria disponível para mover as despesas. Operação cancelada.");
+                    return false;
+                }
+
+                System.out.println("Categorias disponíveis:");
+                StringBuilder sb = new StringBuilder();
+                for (Categoria c : categoriasP) {
+                    if (c.equals(categoriaAlvo)) continue;
+                    if (sb.length() > 0) sb.append(" , ");
+                    sb.append(c.getNome());
+                }
+                System.out.println(sb.toString());
+
+                System.out.println("\nPara qual categoria da lista deseja mover as despesas?");
+                String nomeDestino = sc.nextLine();
+
+                Categoria categoriaDestino = null;
+                for (Categoria c : categoriasP) {
+                    if (!c.equals(categoriaAlvo) && c.getNome().equalsIgnoreCase(nomeDestino)) {
+                        categoriaDestino = c;
+                        break;
+                    }
+                }
+
+                if (categoriaDestino == null) {
+                    System.out.println("Categoria de destino não encontrada! Operação cancelada.");
+                    return false;
+                }
+
+                for (Despesa d : despesasVinculadas) {
+                    d.setCategoria(categoriaDestino);
+                    categoriaDestino.setOrçamentoAtual(categoriaDestino.getOrçamentoAtual() + Math.abs(d.getValor()));
+                }
+
+            } else { // conf == 2
+                listaDespesas.removeAll(despesasVinculadas);
+                atualizaSaldo();
+            }
+        }
+
+        categoriasP.remove(categoriaAlvo);
+        System.out.println("Categoria Removida!\n");
+        return true;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void listarCategoriasEasDespesas(){
+
+        double disp = 0;
+        for (Categoria c : categoriasP){
+            disp = c.getLimiteOrcamento() - c.getOrçamentoAtual();
+            System.out.println("\n======================\n");
+            System.out.println("[Nome da categoria]: " + c.getNome());
+            System.out.println("[Orçamento disponível]: " + disp);
+            System.out.println("Despesas da categoria: ");
+
+            for (Despesa d : listaDespesas){
+                if (d.getCategoria().equals(c)){
+
+                    System.out.println("--> " + d.getTitulo() + " : " + d.getValor());
+
+                }
+
+            }
+        }
+
+    }
+
+
+
+
+
+
+
+
     @Override
     public void getRelatorio() {
 
+        if (listaDespesas.isEmpty()){
+            System.out.println("Impossível ter um relatório efetivo se não se possuem despesas! Crie e gerencie despesas antes de buscar um relatório\n");
+            return;
+        }
+
+        System.out.println("---->  Relatório Geral  <----");
+
+        double totalR = 0, totalD = 0, valormaiorDespesa = 0;
+
+        for (Receita r : listaReceitas){
+            totalR = totalR + r.getValor();
+        }
+        for (Despesa d : listaDespesas){
+            totalD = totalD + d.getValor();
+            if (d.getValor() > valormaiorDespesa){
+                valormaiorDespesa = d.getValor();
+            }
+        }
+
+        System.out.println("- Com um saldo atual de ---> " + this.saldo + " R$\n");
+
+        System.out.println("- Seu total de receitas resulta em: "+ totalR + " R$");
+        System.out.println("- Seu total de despesas resulta em: "+ totalD + " R$\n");
+
+        System.out.println("- Lista de despesas por categoria: ");
+
+        for (Categoria c : categoriasP){
+
+            System.out.println("Categoria 1: " + c.getNome());
+            System.out.println("Valor gasto nessa categoria: " + c.getOrçamentoAtual());
+            System.out.println("\n");
+        }
+
     }
+
 
     @Override
     public void getAnalise() {
 
+
+        if (listaReceitas.isEmpty() || listaDespesas.isEmpty()){
+            System.out.println("Não é possível haver uma análise sem ao menos uma receita e uma despesa!");
+            return;
+
+        }
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("---->  Análise Da Conta  <----\n");
+
+        this.atualizaSaldo();
+
+        System.out.println("- Atualmente, contabilizando todas as despesas e receitas, seu saldo é de: " + this.saldo + " R$");
+
+        Receita maiorReceita = new Receita();
+
+        for (Receita r : listaReceitas){
+
+            if (r.getValor() > maiorReceita.getValor()){
+                maiorReceita = r;
+            }
+        }
+
+        Despesa maiorDespesa = null;
+
+        for (Despesa d : listaDespesas){
+            if (maiorDespesa == null || Math.abs(d.getValor()) > Math.abs(maiorDespesa.getValor())){
+                maiorDespesa = d;
+            }
+        }
+
+
+        System.out.println("- Sua maior despesa é: " + maiorDespesa.getTitulo() + ", com um gasto de: " + maiorDespesa.getValor() + " R$");
+        System.out.println("Ela está na categoria: " + "[" + maiorDespesa.getCategoria().getNome() + "]");
+
+
+        System.out.println("- Sua maior receita é: " + maiorReceita.getTitulo() + ", com um ganho de: " + maiorReceita.getValor() + " R$");
+
+
+        Categoria categoriaMaior = null;
+        double categoriaMaiorValor = 0;
+
+        for (Categoria c : categoriasP){
+            if (c.getOrçamentoAtual() > categoriaMaiorValor){
+                categoriaMaior = c;
+                categoriaMaiorValor = c.getOrçamentoAtual();
+            }
+        }
+
+        System.out.println("- Categoria com maior volume de gastos: [" + categoriaMaior.getNome() + "], totalizando " + categoriaMaiorValor + " R$\n");
+
+        System.out.println("Gostaria de saber quais despesas seria interessante cortar para minimizar seus gastos?\nSim --> Aperte 1\nNão --> Aperte 0");
+        int conf = sc.nextInt();
+
+        while (conf != 1 && conf != 0){
+            System.out.println("!Reposta Inválida! Deseja receber uma lista de despesas que podem ser cortáveis?\nSim --> Aperte 1\nNão --> Aperte 0");
+            conf = sc.nextInt();
+        }
+
+        if (conf == 1){
+
+            System.out.println("Listas de despesas baseadas em prioridade: \n");
+            for (Despesa d : listaDespesas){
+                if (d.getPrioridade().equals(Prioridade.OPCIONAL)){
+                    System.out.println("- [" + d.getTitulo() + "] é classificada como uma despesa 'Opcional' , portanto, considere cortá-la de seus gastos");
+                }
+            }
+
+            System.out.println("\n");
+
+            for (Despesa d : listaDespesas){
+                if (d.getPrioridade().equals(Prioridade.IMPORTANTE)){
+                    System.out.println("- [" + d.getTitulo() + "] é classificada como uma despesa 'Importante' , portanto, eu não recomendaria removê-la");
+                }
+            }
+
+            System.out.println("\n");
+
+            for (Despesa d : listaDespesas){
+                if (d.getPrioridade().equals(Prioridade.ESSENCIAL)){
+                    System.out.println("- [" + d.getTitulo() + "] é classificada como uma despesa 'Essencial' , portanto, ela é um gasto indispensável, remoção não recomendada!");
+                }
+            }
+
+        }
+
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -7,11 +7,9 @@ public abstract class Transacao {
 	private double valor;
     private String descricao;
     private LocalDate data;
-    private Categoria categoria;
 	
-	public Transacao(String titulo, double valor, Categoria categoria, LocalDate data, String descricao) {
+	public Transacao(String titulo, double valor, LocalDate data, String descricao) {
 		this.titulo = titulo;
-		this.categoria = categoria;
         this.data = data;
         this.descricao = descricao;
 		setValor(valor);
@@ -50,13 +48,6 @@ public abstract class Transacao {
 		this.valor = valor;
 	}
 
-	public Categoria getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
 
     public void setDescricao(String descricao) {this.descricao = descricao;}
 

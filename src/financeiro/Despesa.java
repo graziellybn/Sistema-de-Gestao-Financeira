@@ -5,11 +5,13 @@ import java.time.LocalDate;
 public class Despesa extends Transacao{
 
     private Prioridade prioridade;
+    private Categoria categoria;
 
     public Despesa(String titulo, double valor, Categoria categoria, Prioridade prioridade, LocalDate data, String descricao){
 
-        super(titulo, valor, categoria, data,  descricao);
+        super(titulo, valor, data,  descricao);
         this.prioridade = prioridade;
+        this.categoria = categoria;
 
     }
 
@@ -20,8 +22,13 @@ public class Despesa extends Transacao{
 
 
 
+    public Categoria getCategoria() {
+        return categoria;
+    }
 
-
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
+    }
 
     public Prioridade getPrioridade() {
         return prioridade;
