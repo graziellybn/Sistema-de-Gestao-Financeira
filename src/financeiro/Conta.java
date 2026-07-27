@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class Conta implements Relatorio {
 
-    private Usuario usuario;
+    private ArrayList<Usuario> usuarios;
 
     private ArrayList<Receita> listaReceitas;
     private ArrayList<Despesa> listaDespesas;
@@ -23,7 +23,9 @@ public class Conta implements Relatorio {
 
 
     public Conta(Usuario usuario) {
-        this.usuario = usuario;
+
+        this.usuarios = new ArrayList<>();
+        this.usuarios.add(usuario);
 
         this.categoriasP = new HashSet<>();
 
@@ -43,8 +45,8 @@ public class Conta implements Relatorio {
     }
 
 
-    public Usuario getUsuario() {
-        return this.usuario;
+    public ArrayList<Usuario> getUsuario() {
+        return this.usuarios;
     }
 
 
@@ -61,6 +63,214 @@ public class Conta implements Relatorio {
     public HashSet<Categoria> getCategoriasP() {
         return this.categoriasP;
     }
+
+
+
+
+
+
+    public void mostrarListaUsuarios(){
+
+        for (Usuario u : usuarios){
+            System.out.println("\n=======================================\n");
+            System.out.println("-> Nome: " + u.getNome());
+            System.out.println("-> Email:" + u.getEmail());
+
+        }
+
+    }
+
+
+
+
+
+
+    public void mostrarUsuarioAtual(Usuario usuario){
+
+        System.out.println("Usuário Atual: " + usuario.getNome());
+        System.out.println("Email: " + usuario.getEmail());
+
+    }
+
+
+
+
+
+
+
+    public Usuario buscarUsuarioPorNome(String nome){
+
+        Scanner sc = new Scanner(System.in);
+
+        for (Usuario u : usuarios){
+
+            if (u.getNome().equalsIgnoreCase(nome)){
+
+                System.out.println("digite a senha do usuário "+ u.getNome());
+                int senha = sc.nextInt();
+
+                if (u.getSenha() == senha){
+
+                    return u;
+
+                }
+                else {
+                    System.out.println("Senha Incorreta! Cancelando operação.");
+                    return null;
+                }
+
+            }
+
+        }
+
+        System.out.println("Usuário não encontrado\n");
+
+        return null;
+
+    }
+
+
+
+
+
+
+    public Usuario buscarUsuarioPorEmail(String email){
+
+        Scanner sc = new Scanner(System.in);
+
+        for (Usuario u : usuarios){
+
+            if (u.getEmail().equalsIgnoreCase(email)){
+
+                System.out.println("digite a senha do usuário "+ u.getNome());
+                int senha = sc.nextInt();
+
+                if (u.getSenha() == senha){
+
+                    return u;
+
+                }
+                else {
+                    System.out.println("Senha Incorreta! Cancelando operação.");
+                    return null;
+                }
+
+            }
+
+        }
+
+        System.out.println("Usuário não encontrado\n");
+
+        return null;
+
+
+    }
+
+
+
+
+
+    public Usuario buscarUsuarioPorCPF(String cpf) {
+
+
+        Scanner sc = new Scanner(System.in);
+
+        for (Usuario u : usuarios) {
+
+            if (u.getCpf().equalsIgnoreCase(cpf)) {
+
+                System.out.println("digite a senha do usuário " + u.getNome());
+                int senha = sc.nextInt();
+
+                if (u.getSenha() == senha) {
+
+                    return u;
+
+                } else {
+                    System.out.println("Senha Incorreta! Cancelando operação.");
+                    return null;
+                }
+
+            }
+
+        }
+
+        System.out.println("Usuário não encontrado\n");
+
+        return null;
+
+    }
+
+
+
+
+
+
+
+    public boolean conferirSeEContaFamilia(){
+
+
+        if (usuarios.size() > 1){
+
+            return true;
+
+        }
+
+        return false;
+
+    }
+
+
+
+
+
+
+    public boolean adicionarUsuario(){
+
+        if (usuarios.size() == 1){
+            System.out.println("\nContas Individuais não podem ter mais de um usuário\n");
+            return false;
+
+        }
+
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("Vamos adicionar um novo usuário para sua conta família!\n");
+
+        System.out.println("Qual o nome do usuário novo?");
+        String nome = sc.nextLine();
+
+        System.out.println("Adicione um email para este usuário: ");
+        String email = sc.nextLine();
+
+        System.out.println("Adicione o Cpf novo");
+        String cpf = sc.nextLine();
+
+        for (Usuario u : usuarios){
+
+            if (u.getCpf().equalsIgnoreCase(cpf)){
+
+                System.out.println("CPF já existe em outro usuário! Cancelando operação.\n");
+                return false;
+
+            }
+        }
+
+        System.out.println("Digite a senha do usuário:");
+        int senha = sc.nextInt();
+
+        Usuario novoUsuario = new Usuario(nome, email, senha, cpf);
+
+        novoUsuario.setConta(this);
+
+        usuarios.add(novoUsuario);
+
+        return true;
+
+    }
+
+
+
 
 
 
@@ -105,7 +315,7 @@ public class Conta implements Relatorio {
         Categoria ctg = new Categoria();
 
         for (Categoria c : categoriasP){
-            if (c.getNome().equals(nome)){
+            if (c.getNome().equalsIgnoreCase(nome)){
                 tem = true;
                 ctg = c;
             }
@@ -209,9 +419,10 @@ public class Conta implements Relatorio {
     public boolean removeReceita(String nome) {
         if(nome == null) return false;
         else {
-            for(Receita d : listaReceitas) {
-                if(d.getTitulo().equals(nome)) {
-                    listaReceitas.remove(d);
+            for(Receita r : listaReceitas) {
+                if(r.getTitulo().equals(nome)) {
+                    listaReceitas.remove(r);
+                    this.atualizaSaldo();
                     return true;
                 }
             }
@@ -299,6 +510,7 @@ public class Conta implements Relatorio {
                 prioridade = Prioridade.OPCIONAL;
         }
 
+        System.out.println("Qual a data que a despesa será paga? (dd/MM/yyyy)");
         boolean valido = false;
         LocalDate data = null;
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -596,6 +808,17 @@ public class Conta implements Relatorio {
                     return false;
                 }
 
+                double totalAMover = 0;
+                for (Despesa d : despesasVinculadas) {
+                    totalAMover += Math.abs(d.getValor());
+                }
+
+                if (categoriaDestino.getOrçamentoAtual() + totalAMover > categoriaDestino.getLimiteOrcamento()) {
+                    System.out.println("Atencão!\nMover essas despesas ultrapassaria o limite de orçamento de \"" + categoriaDestino.getNome() + "\". Operação cancelada.");
+                    return false;
+
+                }
+
                 for (Despesa d : despesasVinculadas) {
                     d.setCategoria(categoriaDestino);
                     categoriaDestino.setOrçamentoAtual(categoriaDestino.getOrçamentoAtual() + Math.abs(d.getValor()));
@@ -664,19 +887,17 @@ public class Conta implements Relatorio {
 
         System.out.println("---->  Relatório Geral  <----");
 
-        double totalR = 0, totalD = 0, valormaiorDespesa = 0;
+        double totalR = 0, totalD = 0;
 
         for (Receita r : listaReceitas){
             totalR = totalR + r.getValor();
         }
+
         for (Despesa d : listaDespesas){
-            totalD = totalD + d.getValor();
-            if (d.getValor() > valormaiorDespesa){
-                valormaiorDespesa = d.getValor();
-            }
+            totalD = totalD + Math.abs(d.getValor());
         }
 
-        System.out.println("- Com um saldo atual de ---> " + this.saldo + " R$\n");
+        System.out.println("- Com um saldo atual de ---> " + this.getSaldo() + " R$\n");
 
         System.out.println("- Seu total de receitas resulta em: "+ totalR + " R$");
         System.out.println("- Seu total de despesas resulta em: "+ totalD + " R$\n");
@@ -689,6 +910,7 @@ public class Conta implements Relatorio {
             System.out.println("Categoria " + cont + ": " + c.getNome());
             System.out.println("Valor gasto nessa categoria: " + c.getOrçamentoAtual());
             System.out.println("\n");
+            cont++;
         }
 
     }

@@ -33,7 +33,6 @@ public class Receita extends Transacao{
         int opcao = -1;
         boolean confirmado = false;
 
-        // repete enquanto o usuário não confirmar a escolha
         while (!confirmado) {
 
             int tentativas = 0;
@@ -80,8 +79,8 @@ public class Receita extends Transacao{
                 System.out.println("Resposta inválida, considerando como 'não'.");
             }
         }
+        sc.nextLine();
 
-        // Aqui embaixo, opcao já foi validado e confirmado
         switch (opcao) {
             case 0:
                 System.out.println("Título atual: " + getTitulo());
