@@ -33,26 +33,25 @@ public class Receita extends Transacao{
         int opcao = -1;
         boolean confirmado = false;
 
-        // repete enquanto o usuário não confirmar a escolha
+
         while (!confirmado) {
 
             int tentativas = 0;
             boolean valido = false;
 
-            // valida c limite de tentativas
             while (tentativas < 3 && !valido) {
                 System.out.println("Escolha o que quer editar: ");
-                System.out.println("0 ---> Alterar Título");
-                System.out.println("1 ---> Alterar Valor");
-                System.out.println("2 ---> Alterar Data");
-                System.out.println("3 ---> Alterar Descricao");
+                System.out.println("1 ---> Alterar Título");
+                System.out.println("2 ---> Alterar Valor");
+                System.out.println("3 ---> Alterar Data");
+                System.out.println("4 ---> Alterar Descricao");
 
                 if (sc.hasNextInt()) {
                     opcao = sc.nextInt();
-                    if (opcao >= 0 && opcao <= 3) {
+                    if (opcao >= 0 && opcao <= 4) {
                         valido = true;
                     } else {
-                        System.out.println("Opção fora do intervalo (0 a 3).");
+                        System.out.println("Opção fora do intervalo (0 a 4).");
                         tentativas++;
                     }
                 } else {
@@ -62,7 +61,7 @@ public class Receita extends Transacao{
                 }
             }
 
-            // Excedeu as tentativas cancela geral
+
             if (!valido) {
                 System.out.println("Número máximo de tentativas excedido. Cancelando edição.");
                 return false;
@@ -81,15 +80,18 @@ public class Receita extends Transacao{
             }
         }
 
-        // Aqui embaixo, opcao já foi validado e confirmado
+
         switch (opcao) {
             case 0:
+                System.out.println("Finalizando operação...");
+                return false;
+            case 1:
                 System.out.println("Título atual: " + getTitulo());
                 System.out.println("Digite o novo título: ");
                 String novoTitulo = sc.nextLine();
                 setTitulo(novoTitulo);
                 return true;
-            case 1:
+            case 2:
                 System.out.println("Valor atual: " + getValor());
                 System.out.println("Digite o novo valor: ");
                 double novoValor = sc.nextDouble();
@@ -99,7 +101,7 @@ public class Receita extends Transacao{
                 }
                 setValor(novoValor);
                 return true;
-            case 2:
+            case 3:
                 boolean valido = false;
                 LocalDate novaData = null;
                 DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -117,7 +119,7 @@ public class Receita extends Transacao{
                 }
                 setData(novaData);
                 return true;
-            case 3:
+            case 4:
                 System.out.println("Descrição atual: " +  getDescricao());
                 System.out.println("Digite a nova descrição: ");
                 String novaDescricao = sc.nextLine();

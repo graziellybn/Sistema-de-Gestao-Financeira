@@ -1,6 +1,9 @@
 package financeiro;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Scanner;
 
 public class Despesa extends Transacao{
 
@@ -47,4 +50,147 @@ public class Despesa extends Transacao{
         return this.prioridade.isPotencialmenteReduzivel();
     }
 
+
+
+
+    public boolean editReceita() {
+
+        Scanner sc = new Scanner(System.in);
+        if(getPrioridade() == Prioridade.ESSENCIAL) {
+
+            System.out.println("Você está editando uma despesa ESSENCIAL. Confirma? (s/n)");
+            String resposta = sc.next().trim().toLowerCase();
+
+            if (resposta.equals("s")) {
+
+            } else if (resposta.equals("n")) {
+                System.out.println("Finalizando operação...");
+                return false;
+            } else {
+                System.out.println("Resposta inválida.");
+                System.out.println("Finalizando operação...");
+                return false;
+            }
+        }
+
+        int opcao = -1;
+        boolean confirmado = false;
+
+        while (!confirmado) {
+
+            int tentativas = 0;
+            boolean valido = false;
+
+            while (tentativas < 3 && !valido) {
+                System.out.println("Escolha o que quer editar: ");
+                System.out.println("1 ---> Alterar Título");
+                System.out.println("2 ---> Alterar Valor");
+                System.out.println("3 ---> Alterar Data");
+                System.out.println("4 ---> Alterar Descricao");
+                System.out.println("5 ---> Alterar Categoria");
+                System.out.println("6 ---> Alterar Prioridade");
+
+                if (sc.hasNextInt()) {
+                    opcao = sc.nextInt();
+                    if (opcao >= 0 && opcao <= 6) {
+                        valido = true;
+                    } else {
+                        System.out.println("Opção fora do intervalo (0 a 6).");
+                        tentativas++;
+                    }
+                } else {
+                    System.out.println("Entrada inválida, digite um número.");
+                    sc.next();
+                    tentativas++;
+                }
+            }
+
+            // Excedeu as tentativas cancela geral
+            if (!valido) {
+                System.out.println("Número máximo de tentativas excedido. Cancelando edição.");
+                return false;
+            }
+
+            System.out.println("Você escolheu a opção " + opcao + ". Confirma? (s/n)");
+            String resposta = sc.next().trim().toLowerCase();
+
+            if (resposta.equals("s")) {
+                confirmado = true;
+            } else if (resposta.equals("n")) {
+                System.out.println("Ok, vamos escolher de novo.");
+                // o while externo repete
+            } else {
+                System.out.println("Resposta inválida, considerando como 'não'.");
+            }
+        }
+
+
+        switch (opcao) {
+            case 0:
+                System.out.println("Finalizando operação...");
+                return false;
+            case 1:
+                System.out.println("Título atual: " + getTitulo());
+                System.out.println("Digite o novo título: ");
+                String novoTitulo = sc.nextLine();
+                setTitulo(novoTitulo);
+                return true;
+            case 2:
+                System.out.println("Valor atual: " + getValor());
+                System.out.println("Digite o novo valor: ");
+                double novoValor = sc.nextDouble();
+                while(novoValor <= 0 && sc.hasNextDouble()) {
+                    System.out.println("Valor inválido, digite um novo valor");
+                    novoValor = sc.nextDouble();
+                }
+                setValor(novoValor);
+                return true;
+            case 3:
+                boolean valido = false;
+                LocalDate novaData = null;
+                DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                while (!valido) {
+                    System.out.println("Digite a nova data (dd/MM/yyyy): ");
+                    String texto = sc.next();
+
+                    try {
+                        novaData = LocalDate.parse(texto, formato);
+                        valido = true;
+                    } catch (DateTimeParseException e) {
+                        System.out.println("Data inválida! Use o formato dd/MM/yyyy.");
+                    }
+                }
+                setData(novaData);
+                return true;
+            case 4:
+                System.out.println("Descrição atual: " +  getDescricao());
+                System.out.println("Digite a nova descrição: ");
+                String novaDescricao = sc.nextLine();
+                setDescricao(novaDescricao);
+                return true;
+            case 5:
+
+            case 6:
+                System.out.println("Qual prioridade você deseja colocar?");
+                System.out.println("1 ---> Opcional");
+                System.out.println("2 ---> Importante");
+                System.out.println("3 ---> Essencial");
+                int opcao2 = sc.nextInt();
+
+                while(opcao2 < 1 || opcao2 > 3) {
+                    System.out.println("Opção inválida, escolha novamente: ");
+                    opcao2 = sc.nextInt();
+                }
+
+                if(opcao2 == 1) {setPrioridade(Prioridade.OPCIONAL);}
+                else if(opcao2 == 2) {setPrioridade(Prioridade.IMPORTANTE);}
+                else if(opcao2 == 3) {setPrioridade(Prioridade.ESSENCIAL);}
+
+                return true;
+
+        }
+
+        return false;
+    }
 }

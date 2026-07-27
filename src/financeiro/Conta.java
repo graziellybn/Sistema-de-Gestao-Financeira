@@ -73,6 +73,7 @@ public class Conta implements Relatorio {
             System.out.println("\n==============================\n");
             System.out.println("[Nome da Receita]: " + r.getTitulo());
             System.out.println("[Valor da Receita]: " + r.getValor());
+            System.out.println("[Data da Receita]: " + r.getData());
             System.out.println("[Descrição da Receita]: " + r.getDescricao());
 
         }
@@ -91,6 +92,8 @@ public class Conta implements Relatorio {
             System.out.println("[Nome da Despesa]: " + d.getTitulo());
             System.out.println("[Categoria da Despesa]: " + d.getCategoria().getNome());
             System.out.println("[Valor da Despesa]: " + d.getValor());
+            System.out.println("[Data da Despesa]: " + d.getData());
+            System.out.println("[Prioridade da Despesa]: " + d.getPrioridade());
             System.out.println("[Descrição da Despesa]: " + d.getDescricao());
 
         }
@@ -299,6 +302,7 @@ public class Conta implements Relatorio {
                 prioridade = Prioridade.OPCIONAL;
         }
 
+        System.out.println("Qual a data que a receita entrará em sua carteira? (dd/mm/aaaa)");
         boolean valido = false;
         LocalDate data = null;
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -623,8 +627,6 @@ public class Conta implements Relatorio {
 
 
 
-
-
     public void listarCategoriasEasDespesas(){
 
         double disp = 0;
@@ -650,7 +652,19 @@ public class Conta implements Relatorio {
 
 
 
-
+    public void mostrarCategorias() {
+        if(categoriasP.isEmpty()){
+            System.out.println("Não há nenhuma categoria disponível.");
+        }
+        else{
+            for(Categoria c : categoriasP) {
+                System.out.println("====================");
+                System.out.println("[Nome]: " + c.getNome());
+                System.out.println("[Limite]: " + c.getLimiteOrcamento());
+                System.out.println("[Gastos]: " + c.getOrçamentoAtual());
+            }
+        }
+    }
 
 
 
@@ -792,20 +806,3 @@ public class Conta implements Relatorio {
 
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
