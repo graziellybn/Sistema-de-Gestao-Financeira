@@ -33,7 +33,6 @@ public class Receita extends Transacao{
         int opcao = -1;
         boolean confirmado = false;
 
-
         while (!confirmado) {
 
             int tentativas = 0;
@@ -79,6 +78,7 @@ public class Receita extends Transacao{
                 System.out.println("Resposta inválida, considerando como 'não'.");
             }
         }
+        sc.nextLine();
 
 
         switch (opcao) {
