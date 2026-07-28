@@ -1004,6 +1004,48 @@ public class Conta implements Relatorio {
 
         System.out.println("- A sua categoria com maior volume de gastos é: [" + categoriaMaior.getNome() + "], totalizando " + categoriaMaiorValor + " R$\n");
 
+        System.out.println("- As despesas dos últimos 15 dias foram: ");
+        LocalDate hoje = LocalDate.now();
+        LocalDate quinzeDiasAtras = hoje.minusDays(15);
+        for (Despesa despesa : getListaDespesas()) {
+
+            LocalDate data = despesa.getData();
+
+            if (!data.isBefore(quinzeDiasAtras) && !data.isAfter(hoje)) {
+                System.out.println("Nome: " + despesa.getValor());
+                System.out.println("Data: " + despesa.getData());
+                System.out.println("Valor: " + despesa.getValor());
+                System.out.println();
+            }
+        }
+
+        System.out.println("Gostaria de ver as despesas do último mês?\nSim --> Aperte 1\nNão --> Aperte 0");
+        int conf1 = sc.nextInt();
+        sc.nextLine();
+
+        while (conf1 != 1 && conf1 != 0){
+            System.out.println("!Reposta Inválida! Deseja ver as despesas do último mês?\nSim --> Aperte 1\nNão --> Aperte 0");
+            conf1 = sc.nextInt();
+            sc.nextLine();
+        }
+
+        if(conf1 == 1){
+            LocalDate hojekk = LocalDate.now();
+
+            for (Despesa despesa : getListaDespesas()) {
+                LocalDate data = despesa.getData();
+
+                if (data.getMonthValue() == hojekk.getMonthValue() &&
+                        data.getYear() == hojekk.getYear()) {
+
+                    System.out.println("Nome: " + despesa.getValor());
+                    System.out.println("Data: " + despesa.getData());
+                    System.out.println("Valor: " + despesa.getValor());
+                    System.out.println();
+                }
+            }
+        }
+
         System.out.println("Gostaria de saber quais despesas seria interessante cortar para minimizar seus gastos?\nSim --> Aperte 1\nNão --> Aperte 0");
         int conf = sc.nextInt();
 
